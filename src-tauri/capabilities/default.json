@@ -1,0 +1,61 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "AI 写作客户端默认权限配置",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "core:path:default",
+    "core:path:allow-join",
+    "core:path:allow-resolve",
+    "sql:default",
+    "sql:allow-load",
+    "sql:allow-execute",
+    "sql:allow-select",
+    "sql:allow-close",
+    "fs:default",
+    "fs:allow-appdata-read",
+    "fs:allow-appdata-write",
+    "fs:allow-appdata-read-recursive",
+    "fs:allow-appdata-write-recursive",
+    {
+      "identifier": "fs:allow-mkdir",
+      "allow": [
+        { "path": "$APP/**" },
+        { "path": "$DESKTOP/**" },
+        { "path": "$DOCUMENT/**" },
+        { "path": "$DOWNLOAD/**" },
+        { "path": "$HOME/**" }
+      ]
+    },
+    "fs:allow-read-file",
+    "fs:allow-write-file",
+    "fs:allow-read-text-file",
+    {
+      "identifier": "fs:allow-write-text-file",
+      "allow": [
+        { "path": "$APP/**" },
+        { "path": "$DESKTOP/**" },
+        { "path": "$DOCUMENT/**" },
+        { "path": "$DOWNLOAD/**" },
+        { "path": "$HOME/**" }
+      ]
+    },
+    "fs:allow-exists",
+    "fs:allow-remove",
+    "fs:allow-rename",
+    "fs:allow-copy-file",
+    "dialog:default",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "os:default",
+    "http:default",
+    {
+      "identifier": "http:allow-fetch",
+      "allow": [
+        { "url": "https://*" },
+        { "url": "http://*" }
+      ]
+    }
+  ]
+}

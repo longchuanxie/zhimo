@@ -1,0 +1,51 @@
+[package]
+name = "ai-writing-client"
+version = "0.1.0"
+description = "知墨 - 本地优先桌面客户端"
+authors = ["zhimo"]
+edition = "2021"
+rust-version = "1.77"
+
+# 库定义：Tauri v2 推荐使用 lib + main 结构
+[lib]
+name = "ai_writing_client_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-sql = { version = "2", features = ["sqlite"] }
+tauri-plugin-fs = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-os = "2"
+tauri-plugin-http = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# 加密相关：用于 API Key 本地加密
+aes-gcm = "0.10"
+rand = "0.8"
+base64 = "0.22"
+hex = "0.4"
+
+# 日志
+log = "0.4"
+
+# 文档解析(资料导入 #2)
+pdf-extract = "0.7"                # PDF 纯文本提取(文本型 PDF)
+docx-rs = "0.4"                    # Word .docx 解析
+pulldown-cmark = { version = "0.12", default-features = false }  # Markdown 解析(项目从文档导入)
+
+# OCR 集成(资料导入 #2 阶段 3,扫描版 PDF 兜底)
+# 暂未启用:paddle-ocr-rs 0.6.1 与 ort 2.0.0-rc.12 API 不兼容
+# 详见技术债文档:#2-OCR集成待后续迭代
+# pdfium-render = "0.9"
+# image = "0.25"
+# paddle-ocr-rs = "0.6"
+# reqwest = { version = "0.12", features = ["blocking"] }
+
+[features]
+# 默认启用自定义协议
+custom-protocol = ["tauri/custom-protocol"]

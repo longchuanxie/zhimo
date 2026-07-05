@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI 原生写作项目系统 - Heroicons 规范空状态 UI 原型 v0.2</title>
+  <style>
+    :root {
+      --bg: #F6F3EC;
+      --surface: #FFFDF8;
+      --surface-2: #F1EEE7;
+      --surface-3: #E7E0D4;
+      --ink: #25221E;
+      --muted: #746D62;
+      --subtle: #9B9285;
+      --line: #DDD5C7;
+      --brand: #4E6E5D;
+      --brand-dark: #314D41;
+      --brand-soft: #E6EFE8;
+      --accent: #B7784B;
+      --accent-soft: #F3E1D0;
+      --blue: #50698D;
+      --blue-soft: #E8EDF5;
+      --danger: #A6584F;
+      --danger-soft: #F5E5E1;
+      --warning: #9A6A32;
+      --warning-soft: #F4E7D1;
+      --shadow: 0 22px 60px rgba(54,45,35,.16);
+      --shadow-soft: 0 10px 30px rgba(54,45,35,.08);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --font: ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+      --mono: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 16% 7%, rgba(183,120,75,.15), transparent 28%),
+        radial-gradient(circle at 82% 2%, rgba(78,110,93,.13), transparent 34%),
+        var(--bg);
+    }
+
+    .sprite { display: none; }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex: none;
+    }
+
+    .icon-lg {
+      width: 42px;
+      height: 42px;
+      stroke-width: 1.55;
+    }
+
+    .shell { max-width: 1540px; margin: 0 auto; padding: 24px; }
+
+    .topbar {
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(145deg, var(--brand), var(--brand-dark));
+      box-shadow: var(--shadow-soft);
+    }
+
+    .brand-title { font-size: 18px; font-weight: 840; letter-spacing: -.02em; }
+    .brand-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .top-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill {
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .tab {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 10px 13px;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .tab.active {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+      box-shadow: var(--shadow-soft);
+    }
+    .tab .icon { width: 16px; height: 16px; stroke-width: 2; }
+
+    .screen {
+      display: none;
+      min-height: 820px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background: rgba(255,253,248,.76);
+      border: 1px solid rgba(221,213,199,.92);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+    .screen.active { display: block; }
+
+    .frame { display: grid; grid-template-columns: 236px 1fr 360px; min-height: 820px; }
+    .frame.single { grid-template-columns: 1fr; }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: rgba(241,238,231,.72);
+      padding: 18px 13px;
+    }
+
+    .side-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 5px;
+      margin-bottom: 20px;
+    }
+
+    .mini-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      display: grid;
+      place-items: center;
+    }
+
+    .mini-mark .icon { width: 18px; height: 18px; }
+
+    .side-title { font-size: 14px; font-weight: 780; }
+    .side-sub { font-size: 11px; color: var(--subtle); margin-top: 2px; }
+
+    .section-label {
+      color: var(--subtle);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin: 18px 10px 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      color: var(--muted);
+      font-size: 14px;
+      margin: 2px 0;
+    }
+
+    .nav-item.active {
+      background: var(--surface);
+      color: var(--ink);
+      font-weight: 760;
+      box-shadow: 0 1px 0 rgba(0,0,0,.03);
+    }
+
+    .nav-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 11px;
+      background: var(--surface-3);
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+    }
+
+    .nav-icon .icon { width: 17px; height: 17px; stroke-width: 2; }
+    .nav-item.active .nav-icon {
+      background: var(--brand-soft);
+      color: var(--brand);
+    }
+
+    .main {
+      padding: 26px 30px;
+      overflow: auto;
+      background: rgba(255,253,248,.43);
+    }
+
+    .agent {
+      border-left: 1px solid var(--line);
+      background: rgba(248,245,238,.78);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      overflow: auto;
+    }
+
+    .h1 { margin: 0 0 8px; font-size: 29px; line-height: 1.12; font-weight: 860; letter-spacing: -.04em; }
+    .h2 { margin: 0 0 8px; font-size: 22px; line-height: 1.2; font-weight: 820; letter-spacing: -.03em; }
+    .h3 { margin: 0 0 6px; font-size: 15px; font-weight: 780; }
+    .body { color: var(--muted); line-height: 1.65; font-size: 14px; margin: 0; }
+    .caption { color: var(--subtle); line-height: 1.45; font-size: 12px; margin: 0; }
+    .mono { font-family: var(--mono); font-size: 12px; }
+
+    .header-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+    .btn-row, .empty-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 720;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+    .btn .icon { width: 17px; height: 17px; stroke-width: 2.1; }
+    .btn-primary { background: var(--brand); color: white; box-shadow: 0 10px 24px rgba(78,110,93,.24); }
+    .btn-secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+    .btn-ghost { background: transparent; color: var(--muted); }
+    .btn-danger { background: var(--danger-soft); color: var(--danger); }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(221,213,199,.82);
+      background: var(--surface-2);
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .tag .icon { width: 13px; height: 13px; stroke-width: 2.2; }
+    .tag.green { color: var(--brand); background: var(--brand-soft); border-color: rgba(78,110,93,.2); }
+    .tag.orange { color: #7A4B2B; background: var(--accent-soft); border-color: rgba(183,120,75,.2); }
+    .tag.blue { color: var(--blue); background: var(--blue-soft); border-color: rgba(80,105,141,.22); }
+    .tag.danger { color: var(--danger); background: var(--danger-soft); border-color: rgba(166,88,79,.2); }
+
+    .empty-wrap { min-height: 600px; display: grid; place-items: center; }
+
+    .empty-card {
+      width: min(590px, 100%);
+      padding: 36px;
+      border-radius: 30px;
+      background: rgba(255,253,248,.84);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .empty-card::before {
+      content: "";
+      position: absolute;
+      right: -70px;
+      top: -80px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: rgba(78,110,93,.07);
+    }
+
+    .empty-card.compact {
+      padding: 24px;
+      width: 100%;
+      box-shadow: none;
+      background: rgba(255,253,248,.64);
+      border-style: dashed;
+    }
+
+    .empty-illustration {
+      width: 92px;
+      height: 92px;
+      border-radius: 30px;
+      margin: 0 auto 18px;
+      background:
+        linear-gradient(145deg, rgba(78,110,93,.14), rgba(183,120,75,.12)),
+        var(--surface);
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: var(--brand);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+      position: relative;
+      z-index: 1;
+    }
+    .empty-illustration .icon { width: 44px; height: 44px; stroke-width: 1.45; }
+
+    .empty-actions {
+      justify-content: center;
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hint {
+      margin-top: 18px;
+      padding: 12px 14px;
+      border-radius: 15px;
+      color: var(--brand);
+      background: rgba(78,110,93,.09);
+      font-size: 13px;
+      line-height: 1.5;
+      position: relative;
+      z-index: 1;
+    }
+
+    .empty-spec {
+      margin-top: 16px;
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(80,105,141,.2);
+      background: rgba(232,237,245,.65);
+      color: #3D526F;
+      position: relative;
+      z-index: 1;
+    }
+    .empty-spec pre {
+      margin: 0;
+      white-space: pre-wrap;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      line-height: 1.55;
+    }
+
+    .agent-head { display: flex; align-items: center; gap: 12px; }
+    .agent-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 17px;
+      background: linear-gradient(145deg,var(--brand),var(--brand-dark));
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+    }
+    .agent-avatar .icon { width: 22px; height: 22px; stroke-width: 2; }
+
+    .context-box {
+      padding: 12px;
+      border-radius: 16px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      border: 1px solid rgba(78,110,93,.18);
+    }
+
+    .action-list { display: grid; gap: 8px; }
+    .action {
+      text-align: left;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 10px 12px;
+      color: var(--ink);
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      gap: 9px;
+      align-items: center;
+    }
+    .action .icon { width: 17px; height: 17px; color: var(--brand); }
+
+    .agent-empty {
+      border-radius: 20px;
+      padding: 18px;
+      border: 1px dashed var(--line);
+      background: rgba(255,253,248,.72);
+    }
+
+    .input-bar {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 8px;
+    }
+    .input-bar input { flex: 1; border: 0; outline: 0; background: transparent; padding: 8px; color: var(--ink); font-size: 13px; }
+
+    .drop-zone {
+      min-height: 560px;
+      border-radius: 28px;
+      border: 1.5px dashed var(--line);
+      background: rgba(255,253,248,.54);
+      display: grid;
+      place-items: center;
+      padding: 30px;
+    }
+
+    .editor-area {
+      min-height: 600px;
+      max-width: 800px;
+      margin: 0 auto;
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      box-shadow: var(--shadow-soft);
+      padding: 42px 52px;
+    }
+    .editor-title {
+      border: 0;
+      outline: 0;
+      background: transparent;
+      width: 100%;
+      font-size: 28px;
+      font-weight: 820;
+      color: var(--ink);
+      margin-bottom: 28px;
+    }
+    .placeholder { color: var(--subtle); font-size: 16px; line-height: 1.8; }
+
+    .toolbar { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 22px; }
+
+    .state-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
+    .state-card { border-radius: 22px; border: 1px solid var(--line); background: rgba(255,253,248,.76); padding: 18px; box-shadow: var(--shadow-soft); }
+    .state-card.error { background: rgba(245,229,225,.5); border-color: rgba(166,88,79,.24); }
+    .state-card.warning { background: rgba(244,231,209,.52); border-color: rgba(154,106,50,.24); }
+
+    @media (max-width: 1180px) {
+      .frame { grid-template-columns: 210px 1fr 320px; }
+      .state-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+<svg class="sprite" xmlns="http://www.w3.org/2000/svg">
+  <!-- Self-contained SVG symbols following the intended Heroicons 24/outline mapping. In implementation, replace with @heroicons/react components. -->
+  <symbol id="hi-folder" viewBox="0 0 24 24"><path d="M2.25 6.75A2.25 2.25 0 0 1 4.5 4.5h4.38c.6 0 1.17.24 1.59.66l1.41 1.41c.42.42.99.66 1.59.66h6.03a2.25 2.25 0 0 1 2.25 2.25v7.77a2.25 2.25 0 0 1-2.25 2.25h-15A2.25 2.25 0 0 1 2.25 17.25V6.75Z"/></symbol>
+  <symbol id="hi-document-text" viewBox="0 0 24 24"><path d="M19.5 14.25v-6L14.25 3H6.75A2.25 2.25 0 0 0 4.5 5.25v13.5A2.25 2.25 0 0 0 6.75 21h10.5a2.25 2.25 0 0 0 2.25-2.25v-4.5Z"/><path d="M14.25 3v5.25h5.25M8.25 12h7.5M8.25 15h7.5M8.25 18h4.5"/></symbol>
+  <symbol id="hi-archive-box" viewBox="0 0 24 24"><path d="M3.75 6.75h16.5M4.5 6.75V18A2.25 2.25 0 0 0 6.75 20.25h10.5A2.25 2.25 0 0 0 19.5 18V6.75M6 3.75h12a1.5 1.5 0 0 1 1.5 1.5v1.5h-15v-1.5A1.5 1.5 0 0 1 6 3.75Z"/><path d="M9.75 10.5h4.5"/></symbol>
+  <symbol id="hi-squares-2x2" viewBox="0 0 24 24"><path d="M4.5 4.5h6v6h-6v-6ZM13.5 4.5h6v6h-6v-6ZM4.5 13.5h6v6h-6v-6ZM13.5 13.5h6v6h-6v-6Z"/></symbol>
+  <symbol id="hi-list-bullet" viewBox="0 0 24 24"><path d="M8.25 6.75h12M8.25 12h12M8.25 17.25h12M3.75 6.75h.008v.008H3.75V6.75ZM3.75 12h.008v.008H3.75V12ZM3.75 17.25h.008v.008H3.75v-.008Z"/></symbol>
+  <symbol id="hi-circle-stack" viewBox="0 0 24 24"><path d="M12 8.25c4.56 0 8.25-1.34 8.25-3S16.56 2.25 12 2.25 3.75 3.59 3.75 5.25s3.69 3 8.25 3Z"/><path d="M3.75 5.25v4.5c0 1.66 3.69 3 8.25 3s8.25-1.34 8.25-3v-4.5M3.75 9.75v4.5c0 1.66 3.69 3 8.25 3s8.25-1.34 8.25-3v-4.5M3.75 14.25v4.5c0 1.66 3.69 3 8.25 3s8.25-1.34 8.25-3v-4.5"/></symbol>
+  <symbol id="hi-chat" viewBox="0 0 24 24"><path d="M7.5 8.25h9M7.5 12h6M21 12c0 4.14-4.03 7.5-9 7.5-1.04 0-2.04-.15-2.96-.42L3 21l1.65-4.12C3.61 15.58 3 13.92 3 12c0-4.14 4.03-7.5 9-7.5s9 3.36 9 7.5Z"/></symbol>
+  <symbol id="hi-cpu-chip" viewBox="0 0 24 24"><path d="M8.25 3v3M12 3v3M15.75 3v3M8.25 18v3M12 18v3M15.75 18v3M3 8.25h3M3 12h3M3 15.75h3M18 8.25h3M18 12h3M18 15.75h3"/><path d="M7.5 6h9A1.5 1.5 0 0 1 18 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 16.5v-9A1.5 1.5 0 0 1 7.5 6Z"/><path d="M9.75 9.75h4.5v4.5h-4.5z"/></symbol>
+  <symbol id="hi-arrow-down-tray" viewBox="0 0 24 24"><path d="M12 3v10.5m0 0 3.75-3.75M12 13.5 8.25 9.75M4.5 15.75v2.25A2.25 2.25 0 0 0 6.75 20.25h10.5A2.25 2.25 0 0 0 19.5 18v-2.25"/></symbol>
+  <symbol id="hi-magnifying-glass" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35M18 10.5a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"/></symbol>
+  <symbol id="hi-exclamation-triangle" viewBox="0 0 24 24"><path d="M12 9v4.5M12 17.25h.008v.008H12v-.008Z"/><path d="M10.3 3.75 2.7 18a2.25 2.25 0 0 0 1.99 3.3h14.62A2.25 2.25 0 0 0 21.3 18L13.7 3.75a1.93 1.93 0 0 0-3.4 0Z"/></symbol>
+  <symbol id="hi-plus" viewBox="0 0 24 24"><path d="M12 4.5v15M4.5 12h15"/></symbol>
+  <symbol id="hi-sparkles" viewBox="0 0 24 24"><path d="M9.8 3.6 8.5 7.1 5 8.4l3.5 1.3 1.3 3.5 1.3-3.5 3.5-1.3-3.5-1.3-1.3-3.5ZM17.5 12l-.9 2.4-2.4.9 2.4.9.9 2.4.9-2.4 2.4-.9-2.4-.9-.9-2.4ZM5.8 14.5l-.6 1.6-1.6.6 1.6.6.6 1.6.6-1.6 1.6-.6-1.6-.6-.6-1.6Z"/></symbol>
+  <symbol id="hi-cog" viewBox="0 0 24 24"><path d="M12 8.25A3.75 3.75 0 1 1 12 15.75 3.75 3.75 0 0 1 12 8.25Z"/><path d="M18.75 12a6.8 6.8 0 0 0-.08-1.02l2.05-1.6-2-3.46-2.55 1.02a7.05 7.05 0 0 0-1.77-1.02L14.05 3h-4.1L9.6 5.92c-.63.25-1.22.6-1.77 1.02L5.28 5.92l-2 3.46 2.05 1.6a6.94 6.94 0 0 0 0 2.04l-2.05 1.6 2 3.46 2.55-1.02c.55.42 1.14.77 1.77 1.02l.35 2.92h4.1l.35-2.92c.63-.25 1.22-.6 1.77-1.02l2.55 1.02 2-3.46-2.05-1.6c.05-.34.08-.68.08-1.02Z"/></symbol>
+<symbol id="hi-book-open" viewBox="0 0 24 24"><path d="M12 6.75c-1.8-1.2-3.75-1.8-6-1.8-1.05 0-2.04.12-3 .36v13.5c.96-.24 1.95-.36 3-.36 2.25 0 4.2.6 6 1.8 1.8-1.2 3.75-1.8 6-1.8 1.05 0 2.04.12 3 .36V5.31c-.96-.24-1.95-.36-3-.36-2.25 0-4.2.6-6 1.8Z"/><path d="M12 6.75v13.5"/></symbol>
+</svg>
+
+<div class="shell">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark"><svg class="icon"><use href="#hi-book-open"/></svg></div>
+      <div>
+        <div class="brand-title">AI 原生写作项目系统</div>
+        <div class="brand-sub">空状态 UI 原型 v0.2 · Heroicons 规范版 · Client · Local-first</div>
+      </div>
+    </div>
+    <div class="top-pills">
+      <span class="pill">Heroicons 24/outline</span>
+      <span class="pill">React 组件映射</span>
+      <span class="pill">SQLite</span>
+      <span class="pill">No Auth MVP</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-screen="project-empty"><svg class="icon"><use href="#hi-folder"/></svg>无项目</button>
+    <button class="tab" data-screen="home-empty"><svg class="icon"><use href="#hi-folder"/></svg>项目首页空</button>
+    <button class="tab" data-screen="doc-empty"><svg class="icon"><use href="#hi-document-text"/></svg>空白文档</button>
+    <button class="tab" data-screen="source-empty"><svg class="icon"><use href="#hi-archive-box"/></svg>资料库空</button>
+    <button class="tab" data-screen="card-empty"><svg class="icon"><use href="#hi-squares-2x2"/></svg>卡片库空</button>
+    <button class="tab" data-screen="outline-empty"><svg class="icon"><use href="#hi-list-bullet"/></svg>大纲空</button>
+    <button class="tab" data-screen="knowledge-empty"><svg class="icon"><use href="#hi-circle-stack"/></svg>知识库空</button>
+    <button class="tab" data-screen="agent-empty"><svg class="icon"><use href="#hi-chat"/></svg>Agent 空</button>
+    <button class="tab" data-screen="model-empty"><svg class="icon"><use href="#hi-cpu-chip"/></svg>模型空</button>
+    <button class="tab" data-screen="export-empty"><svg class="icon"><use href="#hi-arrow-down-tray"/></svg>导出空</button>
+    <button class="tab" data-screen="search-empty"><svg class="icon"><use href="#hi-magnifying-glass"/></svg>搜索/筛选空</button>
+    <button class="tab" data-screen="error-empty"><svg class="icon"><use href="#hi-exclamation-triangle"/></svg>异常状态</button>
+  </div>
+
+  <section class="screen active" id="project-empty">
+    <div class="frame single">
+      <main class="main">
+        <div class="header-row">
+          <div>
+            <h1 class="h1">本地写作项目</h1>
+            <p class="body">首次打开客户端时的默认首页。项目图标使用 Heroicons 的 Folder / BookOpen 系列，不再使用文字占位。</p>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-secondary"><svg class="icon"><use href="#hi-folder"/></svg>选择项目库</button>
+            <button class="btn btn-primary"><svg class="icon"><use href="#hi-plus"/></svg>创建项目</button>
+          </div>
+        </div>
+        <div class="empty-wrap">
+          <div class="empty-card">
+            <div class="empty-illustration"><svg class="icon icon-lg"><use href="#hi-folder"/></svg></div>
+            <h2 class="h2">还没有写作项目</h2>
+            <p class="body">创建一个项目，把资料、卡片、大纲、正文和 Agent 对话放在同一个本地工作区里。</p>
+            <div class="empty-actions">
+              <button class="btn btn-primary"><svg class="icon"><use href="#hi-plus"/></svg>创建项目</button>
+              <button class="btn btn-secondary"><svg class="icon"><use href="#hi-arrow-down-tray"/></svg>导入项目包</button>
+            </div>
+            <div class="hint">项目数据会优先保存在本机。后续可以再开启云同步或团队空间。</div>
+            <div class="empty-spec">
+              <pre>Icon mapping:
+Project icon → FolderIcon / BookOpenIcon
+Primary CTA icon → PlusIcon
+Import CTA icon → ArrowDownTrayIcon
+
+Data state:
+projects.count = 0
+
+Primary action:
+ProjectService.createProject(payload)</pre>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <section class="screen" id="home-empty">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="side-brand">
+          <div class="mini-mark"><svg class="icon"><use href="#hi-folder"/></svg></div>
+          <div><div class="side-title">未命名项目</div><div class="side-sub">research · project_001</div></div>
+        </div>
+        <div class="section-label">Project Space</div>
+        <div class="nav-item active"><span class="nav-icon"><svg class="icon"><use href="#hi-folder"/></svg></span>项目首页</div>
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-document-text"/></svg></span>文档</div>
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-archive-box"/></svg></span>资料</div>
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-squares-2x2"/></svg></span>卡片</div>
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-list-bullet"/></svg></span>大纲</div>
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-circle-stack"/></svg></span>知识库</div>
+      </aside>
+      <main class="main">
+        <div class="header-row">
+          <div><h1 class="h1">项目首页</h1><p class="body">项目刚创建，所有核心对象均为空。</p></div>
+          <button class="btn btn-secondary"><svg class="icon"><use href="#hi-cog"/></svg>项目设置</button>
+        </div>
+        <div class="empty-wrap">
+          <div class="empty-card">
+            <div class="empty-illustration"><svg class="icon icon-lg"><use href="#hi-folder"/></svg></div>
+            <h2 class="h2">这个项目还很空</h2>
+            <p class="body">可以先导入资料，让 Agent 理解你的素材；也可以直接新建文档，从正文开始。</p>
+            <div class="empty-actions">
+              <button class="btn btn-primary"><svg class="icon"><use href="#hi-archive-box"/></svg>导入资料</button>
+              <button class="btn btn-secondary"><svg class="icon"><use href="#hi-document-text"/></svg>新建文档</button>
+            </div>
+            <div class="hint">建议路径：导入资料 → 摘录卡片 → 生成大纲 → 开始写作。</div>
+            <div class="empty-spec"><pre>Icon mapping:
+导入资料 → ArchiveBoxIcon
+新建文档 → DocumentTextIcon
+
+Data state:
+documents.count = 0
+sources.count = 0
+cards.count = 0
+knowledge.count = 0</pre></div>
+          </div>
+        </div>
+      </main>
+      <aside class="agent">
+        <div class="agent-head">
+          <div class="agent-avatar"><svg class="icon"><use href="#hi-sparkles"/></svg></div>
+          <div><div class="h3">论文助手</div><p class="caption">agent_role = research_assistant</p></div>
+        </div>
+        <div class="context-box"><div class="h3">当前参考</div><p class="caption">项目目标 · 风格规则</p></div>
+        <div class="agent-empty"><div class="h3">还没有可用上下文</div><p class="body">导入资料或创建文档后，Agent 可以基于当前对象继续协作。</p></div>
+        <div class="action-list">
+          <button class="action"><svg class="icon"><use href="#hi-sparkles"/></svg>基于项目目标生成大纲</button>
+          <button class="action"><svg class="icon"><use href="#hi-document-text"/></svg>起草一个开头</button>
+          <button class="action"><svg class="icon"><use href="#hi-archive-box"/></svg>列出需要补充的资料</button>
+        </div>
+        <div class="input-bar"><input placeholder="向论文助手提问……"><button class="btn btn-primary">发送</button></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="screen" id="doc-empty">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="section-label">Documents</div>
+        <div class="nav-item active"><span class="nav-icon"><svg class="icon"><use href="#hi-document-text"/></svg></span>未命名文档</div>
+        <div class="section-label">Related</div>
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-archive-box"/></svg></span>关联资料 0</div>
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-squares-2x2"/></svg></span>关联卡片 0</div>
+      </aside>
+      <main class="main">
+        <div class="toolbar">
+          <div>
+            <span class="tag blue"><svg class="icon"><use href="#hi-document-text"/></svg>Document.id = doc_001</span>
+            <span class="tag orange">status = draft</span>
+          </div>
+          <div class="btn-row"><span class="tag green">已保存</span><button class="btn btn-secondary"><svg class="icon"><use href="#hi-arrow-down-tray"/></svg>导出</button></div>
+        </div>
+        <div class="editor-area">
+          <input class="editor-title" value="未命名文档">
+          <p class="placeholder">从这里开始写作，或让 Agent 根据项目目标起草一段开头……</p>
+          <div class="empty-spec"><pre>Icon mapping:
+Document → DocumentTextIcon
+Export → ArrowDownTrayIcon
+Agent quick action → SparklesIcon
+
+Autosave:
+DocumentService.autosaveDocument(project_id, document_id, payload)</pre></div>
+        </div>
+      </main>
+      <aside class="agent">
+        <div class="agent-head"><div class="agent-avatar"><svg class="icon"><use href="#hi-sparkles"/></svg></div><div><div class="h3">写作助手</div><p class="caption">bound_object_type = document</p></div></div>
+        <div class="context-box"><div class="h3">当前参考</div><p class="caption">当前文档 · 项目目标 · 风格规则</p></div>
+        <div class="agent-empty"><div class="h3">还没有写作上下文</div><p class="body">你可以先输入一段文字，或让 Agent 根据项目目标起草一个开头。</p></div>
+        <div class="action-list">
+          <button class="action"><svg class="icon"><use href="#hi-sparkles"/></svg>起草开头</button>
+          <button class="action"><svg class="icon"><use href="#hi-list-bullet"/></svg>生成章节提纲</button>
+          <button class="action"><svg class="icon"><use href="#hi-document-text"/></svg>根据项目目标写一段</button>
+        </div>
+        <div class="input-bar"><input placeholder="让 Agent 起草或提问……"><button class="btn btn-primary">发送</button></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="screen" id="source-empty">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-folder"/></svg></span>项目首页</div>
+        <div class="nav-item active"><span class="nav-icon"><svg class="icon"><use href="#hi-archive-box"/></svg></span>资料库</div>
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-document-text"/></svg></span>SourceChunk</div>
+      </aside>
+      <main class="main">
+        <div class="header-row">
+          <div><h1 class="h1">资料库</h1><p class="body">资料会成为 Agent 写作时的上下文。MVP 支持本地文件与粘贴文本。</p></div>
+          <div class="btn-row"><button class="btn btn-secondary"><svg class="icon"><use href="#hi-document-text"/></svg>粘贴文本</button><button class="btn btn-primary"><svg class="icon"><use href="#hi-archive-box"/></svg>导入文件</button></div>
+        </div>
+        <div class="drop-zone">
+          <div class="empty-card">
+            <div class="empty-illustration"><svg class="icon icon-lg"><use href="#hi-archive-box"/></svg></div>
+            <h2 class="h2">还没有导入资料</h2>
+            <p class="body">你可以导入 PDF、Word、Markdown、TXT，或直接粘贴文本。资料默认保存在本机。</p>
+            <div class="empty-actions"><button class="btn btn-primary"><svg class="icon"><use href="#hi-archive-box"/></svg>导入文件</button><button class="btn btn-secondary"><svg class="icon"><use href="#hi-document-text"/></svg>粘贴文本</button></div>
+            <div class="hint">可将文件拖拽到此区域。扫描件 OCR 后置到 P1。</div>
+            <div class="empty-spec"><pre>Icon mapping:
+Source → ArchiveBoxIcon
+Text source → DocumentTextIcon
+
+After upload:
+Source.processing_status = pending → parsing → parsed → ready</pre></div>
+          </div>
+        </div>
+      </main>
+      <aside class="agent">
+        <div class="agent-head"><div class="agent-avatar"><svg class="icon"><use href="#hi-archive-box"/></svg></div><div><div class="h3">资料助手</div><p class="caption">bound_object_type = source</p></div></div>
+        <div class="agent-empty"><div class="h3">还没有资料可问</div><p class="body">导入资料后，可以让 Agent 总结、提炼观点或生成摘录卡片。</p></div>
+        <div class="action-list">
+          <button class="action"><svg class="icon"><use href="#hi-sparkles"/></svg>总结资料</button>
+          <button class="action"><svg class="icon"><use href="#hi-squares-2x2"/></svg>生成摘录卡</button>
+        </div>
+        <div class="input-bar"><input placeholder="导入资料后可提问……"><button class="btn btn-primary">发送</button></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="screen" id="card-empty">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-archive-box"/></svg></span>资料</div>
+        <div class="nav-item active"><span class="nav-icon"><svg class="icon"><use href="#hi-squares-2x2"/></svg></span>卡片</div>
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-list-bullet"/></svg></span>大纲</div>
+      </aside>
+      <main class="main">
+        <div class="header-row">
+          <div><h1 class="h1">卡片库</h1><p class="body">卡片是资料、AI 输出和正文之间的中间层。</p></div>
+          <div class="btn-row"><button class="btn btn-secondary"><svg class="icon"><use href="#hi-archive-box"/></svg>从资料摘录</button><button class="btn btn-primary"><svg class="icon"><use href="#hi-plus"/></svg>新建卡片</button></div>
+        </div>
+        <div class="empty-wrap">
+          <div class="empty-card">
+            <div class="empty-illustration"><svg class="icon icon-lg"><use href="#hi-squares-2x2"/></svg></div>
+            <h2 class="h2">还没有卡片</h2>
+            <p class="body">卡片用于承载摘录、论点、人物设定、灵感和 AI 输出，是资料进入正文的中间层。</p>
+            <div class="empty-actions"><button class="btn btn-primary"><svg class="icon"><use href="#hi-plus"/></svg>新建卡片</button><button class="btn btn-secondary"><svg class="icon"><use href="#hi-archive-box"/></svg>从资料摘录</button></div>
+            <div class="hint">你也可以把 Agent 的回答保存为卡片。</div>
+            <div class="empty-spec"><pre>Icon mapping:
+Card → Squares2X2Icon
+Create → PlusIcon
+From Source → ArchiveBoxIcon
+
+CardService.createCard(project_id, payload)</pre></div>
+          </div>
+        </div>
+      </main>
+      <aside class="agent">
+        <div class="agent-head"><div class="agent-avatar"><svg class="icon"><use href="#hi-squares-2x2"/></svg></div><div><div class="h3">卡片助手</div><p class="caption">requires Card context</p></div></div>
+        <div class="agent-empty"><div class="h3">当前没有卡片可处理</div><p class="body">创建卡片后，Agent 可以基于卡片生成段落、大纲或项目知识。</p></div>
+        <div class="action-list">
+          <button class="action"><svg class="icon"><use href="#hi-document-text"/></svg>基于卡片生成段落</button>
+          <button class="action"><svg class="icon"><use href="#hi-list-bullet"/></svg>基于卡片生成大纲</button>
+        </div>
+        <div class="input-bar"><input placeholder="创建卡片后可继续处理……"><button class="btn btn-primary">发送</button></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="screen" id="outline-empty">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-folder"/></svg></span>项目首页</div>
+        <div class="nav-item active"><span class="nav-icon"><svg class="icon"><use href="#hi-list-bullet"/></svg></span>大纲</div>
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-document-text"/></svg></span>文档</div>
+      </aside>
+      <main class="main">
+        <div class="header-row">
+          <div><h1 class="h1">大纲</h1><p class="body">大纲用于连接资料、卡片和正文。</p></div>
+          <div class="btn-row"><button class="btn btn-secondary"><svg class="icon"><use href="#hi-plus"/></svg>手动创建</button><button class="btn btn-primary"><svg class="icon"><use href="#hi-sparkles"/></svg>AI 生成大纲</button></div>
+        </div>
+        <div class="empty-wrap">
+          <div class="empty-card">
+            <div class="empty-illustration"><svg class="icon icon-lg"><use href="#hi-list-bullet"/></svg></div>
+            <h2 class="h2">还没有大纲</h2>
+            <p class="body">你可以手动创建，也可以让 Agent 基于项目目标、资料或卡片生成。</p>
+            <div class="empty-actions"><button class="btn btn-primary"><svg class="icon"><use href="#hi-sparkles"/></svg>AI 生成大纲</button><button class="btn btn-secondary"><svg class="icon"><use href="#hi-plus"/></svg>手动创建</button></div>
+            <div class="hint">如果已经导入资料或创建卡片，生成的大纲会更准确。</div>
+            <div class="empty-spec"><pre>Icon mapping:
+Outline → ListBulletIcon
+AI Generate → SparklesIcon
+Manual create → PlusIcon
+
+OutlineService.generateOutline(project_id, payload)</pre></div>
+          </div>
+        </div>
+      </main>
+      <aside class="agent">
+        <div class="agent-head"><div class="agent-avatar"><svg class="icon"><use href="#hi-list-bullet"/></svg></div><div><div class="h3">结构助手</div><p class="caption">bound_object_type = project</p></div></div>
+        <div class="context-box"><div class="h3">当前参考</div><p class="caption">项目目标 · 资料 · 卡片</p></div>
+        <div class="agent-empty"><div class="h3">还没有结构讨论</div><p class="body">可以让 Agent 生成大纲、检查结构或扩展某个节点。</p></div>
+        <div class="action-list">
+          <button class="action"><svg class="icon"><use href="#hi-sparkles"/></svg>生成大纲</button>
+          <button class="action"><svg class="icon"><use href="#hi-list-bullet"/></svg>检查结构</button>
+        </div>
+        <div class="input-bar"><input placeholder="向结构助手提问……"><button class="btn btn-primary">发送</button></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="screen" id="knowledge-empty">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-squares-2x2"/></svg></span>卡片</div>
+        <div class="nav-item active"><span class="nav-icon"><svg class="icon"><use href="#hi-circle-stack"/></svg></span>知识库</div>
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-chat"/></svg></span>Agent 对话</div>
+      </aside>
+      <main class="main">
+        <div class="header-row">
+          <div><h1 class="h1">项目知识库</h1><p class="body">知识库保存已确认的论点、设定、风格规则、章节摘要和项目决策。</p></div>
+          <button class="btn btn-primary"><svg class="icon"><use href="#hi-plus"/></svg>新建知识</button>
+        </div>
+        <div class="empty-wrap">
+          <div class="empty-card">
+            <div class="empty-illustration"><svg class="icon icon-lg"><use href="#hi-circle-stack"/></svg></div>
+            <h2 class="h2">还没有项目知识</h2>
+            <p class="body">知识库用于保存已确认的论点、设定、风格规则、章节摘要和项目决策。</p>
+            <div class="empty-actions"><button class="btn btn-primary"><svg class="icon"><use href="#hi-plus"/></svg>新建知识</button><button class="btn btn-secondary"><svg class="icon"><use href="#hi-chat"/></svg>查看 Agent 对话</button></div>
+            <div class="hint">你也可以把 Agent 的回答保存为知识，默认状态为待确认。</div>
+            <div class="empty-spec"><pre>Icon mapping:
+Knowledge → CircleStackIcon
+Agent conversation → ChatBubbleLeftRightIcon
+
+KnowledgeService.createKnowledge(project_id, payload)
+AgentService.saveMessageAsKnowledge(message_id, payload)</pre></div>
+          </div>
+        </div>
+      </main>
+      <aside class="agent">
+        <div class="agent-head"><div class="agent-avatar"><svg class="icon"><use href="#hi-circle-stack"/></svg></div><div><div class="h3">知识助手</div><p class="caption">confirmed knowledge enters ContextPack</p></div></div>
+        <div class="agent-empty"><div class="h3">当前没有可用项目记忆</div><p class="body">保存并确认知识后，Agent 会优先参考它们。</p></div>
+        <div class="input-bar"><input placeholder="创建知识后可继续处理……"><button class="btn btn-primary">发送</button></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="screen" id="agent-empty">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-document-text"/></svg></span>文档</div>
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-archive-box"/></svg></span>资料</div>
+        <div class="nav-item"><span class="nav-icon"><svg class="icon"><use href="#hi-list-bullet"/></svg></span>大纲</div>
+        <div class="nav-item active"><span class="nav-icon"><svg class="icon"><use href="#hi-chat"/></svg></span>Agent</div>
+      </aside>
+      <main class="main">
+        <div class="header-row"><div><h1 class="h1">Agent 对话记录</h1><p class="body">每次对话都绑定当前对象，用于回溯和知识沉淀。</p></div></div>
+        <div class="empty-wrap">
+          <div class="empty-card">
+            <div class="empty-illustration"><svg class="icon icon-lg"><use href="#hi-chat"/></svg></div>
+            <h2 class="h2">还没有 Agent 对话</h2>
+            <p class="body">你可以在文档、资料、卡片或大纲中开始对话。每次对话都会绑定当前对象，方便后续回溯。</p>
+            <div class="empty-actions"><button class="btn btn-primary"><svg class="icon"><use href="#hi-document-text"/></svg>去文档中开始</button></div>
+            <div class="empty-spec"><pre>Icon mapping:
+AgentThread → ChatBubbleLeftRightIcon
+AI action → SparklesIcon
+
+AgentService.createThread({ bound_object_type, bound_object_id })</pre></div>
+          </div>
+        </div>
+      </main>
+      <aside class="agent">
+        <div class="agent-head"><div class="agent-avatar"><svg class="icon"><use href="#hi-chat"/></svg></div><div><div class="h3">Agent 面板空状态</div><p class="caption">当前参考：当前对象</p></div></div>
+        <div class="agent-empty"><div class="h3">还没有对话</div><p class="body">选中文本，或直接输入问题，让 Agent 帮你改写、扩写、检查结构或解释修改理由。</p></div>
+        <div class="action-list">
+          <button class="action"><svg class="icon"><use href="#hi-sparkles"/></svg>改写选区</button>
+          <button class="action"><svg class="icon"><use href="#hi-list-bullet"/></svg>检查结构</button>
+          <button class="action"><svg class="icon"><use href="#hi-document-text"/></svg>起草一段</button>
+        </div>
+        <div class="input-bar"><input placeholder="向 Agent 提问……"><button class="btn btn-primary">发送</button></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="screen" id="model-empty">
+    <div class="frame single">
+      <main class="main">
+        <div class="header-row">
+          <div><h1 class="h1">模型设置</h1><p class="body">未配置模型时，Agent 不能进行摘要、写作修改或多轮对话。</p></div>
+          <button class="btn btn-primary"><svg class="icon"><use href="#hi-plus"/></svg>添加模型服务商</button>
+        </div>
+        <div class="empty-wrap">
+          <div class="empty-card">
+            <div class="empty-illustration"><svg class="icon icon-lg"><use href="#hi-cpu-chip"/></svg></div>
+            <h2 class="h2">还没有配置模型</h2>
+            <p class="body">配置 OpenAI-compatible 服务商后，Agent 才能进行资料摘要、写作修改和多轮对话。</p>
+            <div class="empty-actions"><button class="btn btn-primary"><svg class="icon"><use href="#hi-plus"/></svg>添加模型服务商</button></div>
+            <div class="hint">API Key 会加密保存在本机，不会明文展示。</div>
+            <div class="empty-spec"><pre>Icon mapping:
+ModelProvider → CpuChipIcon
+Settings → Cog6ToothIcon
+
+ModelService.createProvider(payload)
+ModelService.testProvider(provider_id)</pre></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <section class="screen" id="export-empty">
+    <div class="frame single">
+      <main class="main">
+        <div class="header-row">
+          <div><h1 class="h1">导出</h1><p class="body">导出任务会记录范围、格式、状态和本地文件路径。</p></div>
+          <button class="btn btn-primary"><svg class="icon"><use href="#hi-arrow-down-tray"/></svg>开始导出</button>
+        </div>
+        <div class="empty-wrap">
+          <div class="empty-card">
+            <div class="empty-illustration"><svg class="icon icon-lg"><use href="#hi-arrow-down-tray"/></svg></div>
+            <h2 class="h2">还没有可导出的内容</h2>
+            <p class="body">创建文档或从大纲节点生成正文后，就可以导出为 Markdown 或 Word。</p>
+            <div class="empty-actions"><button class="btn btn-primary"><svg class="icon"><use href="#hi-document-text"/></svg>新建文档</button><button class="btn btn-secondary"><svg class="icon"><use href="#hi-list-bullet"/></svg>查看大纲</button></div>
+            <div class="empty-spec"><pre>Icon mapping:
+ExportTask → ArrowDownTrayIcon
+Document → DocumentTextIcon
+Outline → ListBulletIcon
+
+ExportService.createExportTask(project_id, payload)</pre></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <section class="screen" id="search-empty">
+    <div class="frame single">
+      <main class="main">
+        <div class="header-row"><div><h1 class="h1">搜索 / 筛选空状态</h1><p class="body">搜索无结果不应引导用户创建内容，优先引导清除搜索或筛选。</p></div></div>
+        <div class="state-grid">
+          <div class="state-card">
+            <div class="empty-card compact">
+              <div class="empty-illustration" style="width:70px;height:70px;border-radius:22px"><svg class="icon icon-lg"><use href="#hi-magnifying-glass"/></svg></div>
+              <h2 class="h2">没有找到匹配结果</h2>
+              <p class="body">可以换一个关键词，或清除搜索条件。</p>
+              <div class="empty-actions"><button class="btn btn-primary"><svg class="icon"><use href="#hi-magnifying-glass"/></svg>清除搜索</button></div>
+              <div class="empty-spec"><pre>Icon mapping:
+Search → MagnifyingGlassIcon
+
+Trigger:
+keyword exists
+items.length = 0</pre></div>
+            </div>
+          </div>
+          <div class="state-card">
+            <div class="empty-card compact">
+              <div class="empty-illustration" style="width:70px;height:70px;border-radius:22px"><svg class="icon icon-lg"><use href="#hi-list-bullet"/></svg></div>
+              <h2 class="h2">当前筛选下没有内容</h2>
+              <p class="body">可以调整筛选条件，或查看全部内容。</p>
+              <div class="empty-actions"><button class="btn btn-primary"><svg class="icon"><use href="#hi-list-bullet"/></svg>清除筛选</button></div>
+              <div class="empty-spec"><pre>Icon mapping:
+Filter/List state → ListBulletIcon
+
+Trigger:
+filters active
+items.length = 0</pre></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <section class="screen" id="error-empty">
+    <div class="frame single">
+      <main class="main">
+        <div class="header-row"><div><h1 class="h1">异常 / 处理中状态</h1><p class="body">这些不是普通空状态，而是任务状态。必须提供明确下一步。</p></div></div>
+        <div class="state-grid">
+          <div class="state-card warning">
+            <div class="h2"><svg class="icon" style="color:var(--warning);vertical-align:-4px"><use href="#hi-archive-box"/></svg> 正在解析资料</div>
+            <p class="body">系统正在提取文本内容，完成后可以生成摘要、摘录卡片和进行资料问答。</p>
+            <div class="empty-actions" style="justify-content:flex-start"><span class="tag orange">Source.processing_status = parsing</span></div>
+            <div class="empty-spec"><pre>Icon mapping:
+Parsing source → ArchiveBoxIcon
+TaskService.run(parse_source)</pre></div>
+          </div>
+          <div class="state-card error">
+            <div class="h2"><svg class="icon" style="color:var(--danger);vertical-align:-4px"><use href="#hi-exclamation-triangle"/></svg> 资料解析失败</div>
+            <p class="body">这个文件暂时无法提取文本。你可以重试，或手动粘贴资料正文。</p>
+            <div class="empty-actions" style="justify-content:flex-start"><button class="btn btn-danger"><svg class="icon"><use href="#hi-exclamation-triangle"/></svg>重试解析</button><button class="btn btn-secondary"><svg class="icon"><use href="#hi-document-text"/></svg>粘贴文本</button></div>
+            <div class="empty-spec"><pre>Icon mapping:
+Error → ExclamationTriangleIcon
+Text fallback → DocumentTextIcon</pre></div>
+          </div>
+          <div class="state-card error">
+            <div class="h2"><svg class="icon" style="color:var(--danger);vertical-align:-4px"><use href="#hi-exclamation-triangle"/></svg> 模型连接失败</div>
+            <p class="body">请检查 Base URL、API Key 或模型名称是否正确。</p>
+            <div class="empty-actions" style="justify-content:flex-start"><button class="btn btn-danger"><svg class="icon"><use href="#hi-cpu-chip"/></svg>重新测试</button><button class="btn btn-secondary"><svg class="icon"><use href="#hi-cog"/></svg>编辑配置</button></div>
+            <div class="empty-spec"><pre>Icon mapping:
+Model → CpuChipIcon
+Settings → Cog6ToothIcon
+Error → ExclamationTriangleIcon</pre></div>
+          </div>
+          <div class="state-card error">
+            <div class="h2"><svg class="icon" style="color:var(--danger);vertical-align:-4px"><use href="#hi-exclamation-triangle"/></svg> 导出失败</div>
+            <p class="body">导出文件生成失败。可以重试，或检查文档内容是否包含不支持的格式。</p>
+            <div class="empty-actions" style="justify-content:flex-start"><button class="btn btn-danger"><svg class="icon"><use href="#hi-arrow-down-tray"/></svg>重试导出</button><button class="btn btn-secondary"><svg class="icon"><use href="#hi-exclamation-triangle"/></svg>查看错误</button></div>
+            <div class="empty-spec"><pre>Icon mapping:
+Export → ArrowDownTrayIcon
+Error → ExclamationTriangleIcon</pre></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const screens = document.querySelectorAll('.screen');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      screens.forEach(s => s.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.screen).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI 原生写作项目系统 - 缺失组件细化原型 v0.1</title>
+  <style>
+    :root {
+      --bg: #F6F3EC;
+      --surface: #FFFDF8;
+      --surface-2: #F1EEE7;
+      --surface-3: #E7E0D4;
+      --ink: #25221E;
+      --muted: #746D62;
+      --subtle: #9B9285;
+      --line: #DDD5C7;
+      --brand: #4E6E5D;
+      --brand-dark: #314D41;
+      --brand-soft: #E6EFE8;
+      --accent: #B7784B;
+      --accent-soft: #F3E1D0;
+      --blue: #50698D;
+      --blue-soft: #E8EDF5;
+      --purple: #75639A;
+      --purple-soft: #EEE9F8;
+      --danger: #A6584F;
+      --danger-soft: #F5E5E1;
+      --warning: #9A6A32;
+      --warning-soft: #F4E7D1;
+      --success: #4E6E5D;
+      --success-soft: #E6EFE8;
+      --shadow: 0 22px 60px rgba(54,45,35,.16);
+      --shadow-soft: 0 10px 30px rgba(54,45,35,.08);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --font: ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+      --mono: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 16% 7%, rgba(183,120,75,.15), transparent 28%),
+        radial-gradient(circle at 82% 2%, rgba(78,110,93,.13), transparent 34%),
+        var(--bg);
+    }
+
+    .sprite { display: none; }
+    .icon {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 1.9;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex: none;
+    }
+    .icon-sm { width: 16px; height: 16px; stroke-width: 2.1; }
+    .icon-lg { width: 40px; height: 40px; stroke-width: 1.5; }
+
+    .shell { max-width: 1580px; margin: 0 auto; padding: 24px; }
+
+    .topbar {
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(145deg, var(--brand), var(--brand-dark));
+      box-shadow: var(--shadow-soft);
+    }
+    .brand-title { font-size: 18px; font-weight: 840; letter-spacing: -.02em; }
+    .brand-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+    .pill-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill {
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      color: var(--muted);
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 10px 13px;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .tab.active {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .screen {
+      display: none;
+      min-height: 840px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      background: rgba(255,253,248,.76);
+      border: 1px solid rgba(221,213,199,.92);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .screen.active { display: block; }
+
+    .frame {
+      display: grid;
+      grid-template-columns: 270px 1fr;
+      min-height: 840px;
+    }
+
+    .sidebar {
+      border-right: 1px solid var(--line);
+      background: rgba(241,238,231,.72);
+      padding: 18px 13px;
+      overflow: auto;
+    }
+
+    .main {
+      padding: 26px 30px;
+      overflow: auto;
+      background: rgba(255,253,248,.43);
+    }
+
+    .side-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+      padding: 0 6px;
+    }
+
+    .side-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      color: var(--brand);
+      background: var(--brand-soft);
+    }
+
+    .section-label {
+      color: var(--subtle);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin: 18px 10px 8px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      color: var(--muted);
+      font-size: 14px;
+      margin: 2px 0;
+      cursor: pointer;
+    }
+
+    .nav.active {
+      background: var(--surface);
+      color: var(--ink);
+      font-weight: 760;
+      box-shadow: 0 1px 0 rgba(0,0,0,.03);
+    }
+
+    .nav .icon { width: 17px; height: 17px; }
+
+    .h1 { margin: 0 0 8px; font-size: 30px; line-height: 1.12; font-weight: 860; letter-spacing: -.04em; }
+    .h2 { margin: 0 0 8px; font-size: 22px; line-height: 1.2; font-weight: 820; letter-spacing: -.03em; }
+    .h3 { margin: 0 0 6px; font-size: 15px; font-weight: 780; }
+    .body { color: var(--muted); line-height: 1.65; font-size: 14px; margin: 0; }
+    .caption { color: var(--subtle); line-height: 1.45; font-size: 12px; margin: 0; }
+    .mono { font-family: var(--mono); font-size: 12px; }
+
+    .header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255,253,248,.86);
+      box-shadow: var(--shadow-soft);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .component-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .btn-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+    .btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 14px;
+      font-weight: 720;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary { background: var(--brand); color: white; box-shadow: 0 10px 24px rgba(78,110,93,.24); }
+    .btn-secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+    .btn-accent { background: var(--accent-soft); color: #704421; }
+    .btn-danger { background: var(--danger-soft); color: var(--danger); }
+    .btn-ghost { background: transparent; color: var(--muted); }
+    .btn-disabled { background: var(--surface-2); color: var(--subtle); cursor: not-allowed; box-shadow: none; }
+    .btn-sm { padding: 7px 10px; border-radius: 11px; font-size: 12px; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(221,213,199,.82);
+      background: var(--surface-2);
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .tag.green { color: var(--brand); background: var(--brand-soft); border-color: rgba(78,110,93,.2); }
+    .tag.orange { color: #7A4B2B; background: var(--accent-soft); border-color: rgba(183,120,75,.2); }
+    .tag.blue { color: var(--blue); background: var(--blue-soft); border-color: rgba(80,105,141,.22); }
+    .tag.purple { color: var(--purple); background: var(--purple-soft); border-color: rgba(117,99,154,.22); }
+    .tag.danger { color: var(--danger); background: var(--danger-soft); border-color: rgba(166,88,79,.2); }
+
+    .field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 12px; }
+    label { font-size: 12px; color: var(--muted); font-weight: 720; }
+
+    input, textarea, select {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      color: var(--ink);
+      font-size: 14px;
+      outline: 0;
+      width: 100%;
+    }
+
+    textarea { min-height: 88px; resize: none; }
+
+    .input-with-icon {
+      position: relative;
+    }
+    .input-with-icon .icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--subtle);
+      width: 17px;
+      height: 17px;
+    }
+    .input-with-icon input { padding-left: 38px; }
+
+    .segmented {
+      display: inline-flex;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--surface-2);
+      gap: 4px;
+    }
+
+    .segmented button {
+      border: 0;
+      background: transparent;
+      border-radius: 11px;
+      padding: 8px 12px;
+      color: var(--muted);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .segmented button.active {
+      background: var(--surface);
+      color: var(--ink);
+      box-shadow: 0 1px 0 rgba(0,0,0,.04);
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 9px;
+    }
+
+    .table th {
+      text-align: left;
+      color: var(--subtle);
+      font-size: 12px;
+      padding: 0 10px;
+    }
+
+    .table td {
+      padding: 12px 10px;
+      background: var(--surface);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      vertical-align: middle;
+    }
+
+    .table td:first-child {
+      border-left: 1px solid var(--line);
+      border-radius: 14px 0 0 14px;
+    }
+
+    .table td:last-child {
+      border-right: 1px solid var(--line);
+      border-radius: 0 14px 14px 0;
+    }
+
+    .card-item {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .project-card {
+      min-height: 170px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 22px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .project-card::after {
+      content: "";
+      position: absolute;
+      right: -45px;
+      top: -50px;
+      width: 135px;
+      height: 135px;
+      border-radius: 50%;
+      background: rgba(78,110,93,.08);
+    }
+
+    .object-row {
+      display: grid;
+      grid-template-columns: 42px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .object-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 15px;
+      display: grid;
+      place-items: center;
+      color: var(--brand);
+      background: var(--brand-soft);
+    }
+
+    .object-icon.orange { color: #7A4B2B; background: var(--accent-soft); }
+    .object-icon.blue { color: var(--blue); background: var(--blue-soft); }
+    .object-icon.purple { color: var(--purple); background: var(--purple-soft); }
+
+    .modal-backdrop {
+      background: rgba(37,34,30,.28);
+      border-radius: 22px;
+      padding: 24px;
+      display: grid;
+      place-items: center;
+      min-height: 360px;
+    }
+
+    .modal {
+      width: min(560px, 100%);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .drawer-demo {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      min-height: 420px;
+      background: rgba(255,253,248,.5);
+    }
+
+    .drawer-content {
+      padding: 22px;
+    }
+
+    .drawer {
+      border-left: 1px solid var(--line);
+      background: var(--surface);
+      padding: 20px;
+      box-shadow: -12px 0 26px rgba(54,45,35,.06);
+    }
+
+    .command {
+      max-width: 680px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .command-input {
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      border-radius: 0;
+      padding: 16px 18px 16px 44px;
+      background: var(--surface);
+    }
+
+    .command-row {
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(221,213,199,.55);
+    }
+
+    .command-row:last-child { border-bottom: 0; }
+
+    .toast-stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .toast {
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      gap: 12px;
+      align-items: start;
+      padding: 13px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .toast.success { border-color: rgba(78,110,93,.18); background: var(--success-soft); color: var(--success); }
+    .toast.error { border-color: rgba(166,88,79,.18); background: var(--danger-soft); color: var(--danger); }
+    .toast.warning { border-color: rgba(154,106,50,.18); background: var(--warning-soft); color: var(--warning); }
+
+    .progress {
+      height: 8px;
+      border-radius: 999px;
+      background: var(--surface-3);
+      overflow: hidden;
+      margin-top: 10px;
+    }
+    .progress > span {
+      display: block;
+      height: 100%;
+      width: 62%;
+      border-radius: 999px;
+      background: var(--brand);
+    }
+
+    .agent-panel {
+      border: 1px solid var(--line);
+      background: rgba(248,245,238,.78);
+      border-radius: 24px;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .agent-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .agent-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 17px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg,var(--brand),var(--brand-dark));
+      color: #fff;
+    }
+
+    .context-box {
+      border: 1px solid rgba(78,110,93,.18);
+      background: var(--brand-soft);
+      color: var(--brand);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .context-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .context-item {
+      display: grid;
+      grid-template-columns: 20px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+
+    .bubble {
+      padding: 12px 13px;
+      border-radius: 16px;
+      line-height: 1.55;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .bubble.user {
+      background: var(--ink);
+      color: var(--surface);
+      margin-left: 44px;
+    }
+
+    .bubble.ai {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      margin-right: 20px;
+    }
+
+    .explain {
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .diff {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .diff-col {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .del {
+      background: var(--danger-soft);
+      color: var(--danger);
+      text-decoration: line-through;
+      padding: 2px 4px;
+      border-radius: 6px;
+    }
+
+    .ins {
+      background: var(--brand-soft);
+      color: var(--brand);
+      padding: 2px 4px;
+      border-radius: 6px;
+    }
+
+    .kanban {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .kanban-col {
+      background: rgba(241,238,231,.62);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 12px;
+      min-height: 360px;
+    }
+
+    .tree {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 14px;
+    }
+
+    .node {
+      display: grid;
+      grid-template-columns: 24px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      padding: 11px;
+      border-radius: 14px;
+      margin-bottom: 5px;
+    }
+
+    .node.active {
+      background: var(--brand-soft);
+      border: 1px solid rgba(78,110,93,.22);
+    }
+
+    .indent { margin-left: 28px; }
+
+    .metadata-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .meta-cell {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      border-radius: 14px;
+      padding: 10px;
+    }
+
+    .kbd {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 3px 6px;
+      border-radius: 7px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--muted);
+    }
+
+    .spec {
+      margin-top: 12px;
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(80,105,141,.2);
+      background: rgba(232,237,245,.65);
+      color: #3D526F;
+    }
+
+    .spec pre {
+      margin: 0;
+      white-space: pre-wrap;
+      font-family: var(--mono);
+      font-size: 11.5px;
+      line-height: 1.55;
+    }
+
+    .file-drop {
+      min-height: 240px;
+      border: 1.5px dashed var(--line);
+      border-radius: 22px;
+      background: rgba(255,253,248,.58);
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      text-align: center;
+    }
+
+    @media (max-width: 1280px) {
+      .frame { grid-template-columns: 230px 1fr; }
+      .grid-2, .grid-3, .grid-4, .diff, .kanban, .drawer-demo { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<svg class="sprite" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="hi-folder" viewBox="0 0 24 24"><path d="M2.25 6.75A2.25 2.25 0 0 1 4.5 4.5h4.38c.6 0 1.17.24 1.59.66l1.41 1.41c.42.42.99.66 1.59.66h6.03a2.25 2.25 0 0 1 2.25 2.25v7.77a2.25 2.25 0 0 1-2.25 2.25h-15A2.25 2.25 0 0 1 2.25 17.25V6.75Z"/></symbol>
+  <symbol id="hi-document-text" viewBox="0 0 24 24"><path d="M19.5 14.25v-6L14.25 3H6.75A2.25 2.25 0 0 0 4.5 5.25v13.5A2.25 2.25 0 0 0 6.75 21h10.5a2.25 2.25 0 0 0 2.25-2.25v-4.5Z"/><path d="M14.25 3v5.25h5.25M8.25 12h7.5M8.25 15h7.5M8.25 18h4.5"/></symbol>
+  <symbol id="hi-archive-box" viewBox="0 0 24 24"><path d="M3.75 6.75h16.5M4.5 6.75V18A2.25 2.25 0 0 0 6.75 20.25h10.5A2.25 2.25 0 0 0 19.5 18V6.75M6 3.75h12a1.5 1.5 0 0 1 1.5 1.5v1.5h-15v-1.5A1.5 1.5 0 0 1 6 3.75Z"/><path d="M9.75 10.5h4.5"/></symbol>
+  <symbol id="hi-squares" viewBox="0 0 24 24"><path d="M4.5 4.5h6v6h-6v-6ZM13.5 4.5h6v6h-6v-6ZM4.5 13.5h6v6h-6v-6ZM13.5 13.5h6v6h-6v-6Z"/></symbol>
+  <symbol id="hi-list" viewBox="0 0 24 24"><path d="M8.25 6.75h12M8.25 12h12M8.25 17.25h12M3.75 6.75h.008v.008H3.75V6.75ZM3.75 12h.008v.008H3.75V12ZM3.75 17.25h.008v.008H3.75v-.008Z"/></symbol>
+  <symbol id="hi-stack" viewBox="0 0 24 24"><path d="M12 8.25c4.56 0 8.25-1.34 8.25-3S16.56 2.25 12 2.25 3.75 3.59 3.75 5.25s3.69 3 8.25 3Z"/><path d="M3.75 5.25v4.5c0 1.66 3.69 3 8.25 3s8.25-1.34 8.25-3v-4.5M3.75 9.75v4.5c0 1.66 3.69 3 8.25 3s8.25-1.34 8.25-3v-4.5M3.75 14.25v4.5c0 1.66 3.69 3 8.25 3s8.25-1.34 8.25-3v-4.5"/></symbol>
+  <symbol id="hi-chat" viewBox="0 0 24 24"><path d="M7.5 8.25h9M7.5 12h6M21 12c0 4.14-4.03 7.5-9 7.5-1.04 0-2.04-.15-2.96-.42L3 21l1.65-4.12C3.61 15.58 3 13.92 3 12c0-4.14 4.03-7.5 9-7.5s9 3.36 9 7.5Z"/></symbol>
+  <symbol id="hi-cpu" viewBox="0 0 24 24"><path d="M8.25 3v3M12 3v3M15.75 3v3M8.25 18v3M12 18v3M15.75 18v3M3 8.25h3M3 12h3M3 15.75h3M18 8.25h3M18 12h3M18 15.75h3"/><path d="M7.5 6h9A1.5 1.5 0 0 1 18 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 16.5v-9A1.5 1.5 0 0 1 7.5 6Z"/><path d="M9.75 9.75h4.5v4.5h-4.5z"/></symbol>
+  <symbol id="hi-download" viewBox="0 0 24 24"><path d="M12 3v10.5m0 0 3.75-3.75M12 13.5 8.25 9.75M4.5 15.75v2.25A2.25 2.25 0 0 0 6.75 20.25h10.5A2.25 2.25 0 0 0 19.5 18v-2.25"/></symbol>
+  <symbol id="hi-search" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35M18 10.5a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z"/></symbol>
+  <symbol id="hi-warning" viewBox="0 0 24 24"><path d="M12 9v4.5M12 17.25h.008v.008H12v-.008Z"/><path d="M10.3 3.75 2.7 18a2.25 2.25 0 0 0 1.99 3.3h14.62A2.25 2.25 0 0 0 21.3 18L13.7 3.75a1.93 1.93 0 0 0-3.4 0Z"/></symbol>
+  <symbol id="hi-plus" viewBox="0 0 24 24"><path d="M12 4.5v15M4.5 12h15"/></symbol>
+  <symbol id="hi-sparkles" viewBox="0 0 24 24"><path d="M9.8 3.6 8.5 7.1 5 8.4l3.5 1.3 1.3 3.5 1.3-3.5 3.5-1.3-3.5-1.3-1.3-3.5ZM17.5 12l-.9 2.4-2.4.9 2.4.9.9 2.4.9-2.4 2.4-.9-2.4-.9-.9-2.4ZM5.8 14.5l-.6 1.6-1.6.6 1.6.6.6 1.6.6-1.6 1.6-.6-1.6-.6-.6-1.6Z"/></symbol>
+  <symbol id="hi-cog" viewBox="0 0 24 24"><path d="M12 8.25A3.75 3.75 0 1 1 12 15.75 3.75 3.75 0 0 1 12 8.25Z"/><path d="M18.75 12a6.8 6.8 0 0 0-.08-1.02l2.05-1.6-2-3.46-2.55 1.02a7.05 7.05 0 0 0-1.77-1.02L14.05 3h-4.1L9.6 5.92c-.63.25-1.22.6-1.77 1.02L5.28 5.92l-2 3.46 2.05 1.6a6.94 6.94 0 0 0 0 2.04l-2.05 1.6 2 3.46 2.55-1.02c.55.42 1.14.77 1.77 1.02l.35 2.92h4.1l.35-2.92c.63-.25 1.22-.6 1.77-1.02l2.55 1.02 2-3.46-2.05-1.6c.05-.34.08-.68.08-1.02Z"/></symbol>
+  <symbol id="hi-check" viewBox="0 0 24 24"><path d="m4.5 12.75 5.25 5.25L19.5 6.75"/></symbol>
+  <symbol id="hi-x" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6l12 12"/></symbol>
+  <symbol id="hi-clock" viewBox="0 0 24 24"><path d="M12 6v6l4 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></symbol>
+  <symbol id="hi-eye" viewBox="0 0 24 24"><path d="M2.25 12s3.75-6.75 9.75-6.75S21.75 12 21.75 12 18 18.75 12 18.75 2.25 12 2.25 12Z"/><path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></symbol>
+  <symbol id="hi-trash" viewBox="0 0 24 24"><path d="M6.75 7.5v12A2.25 2.25 0 0 0 9 21.75h6a2.25 2.25 0 0 0 2.25-2.25v-12M4.5 7.5h15M9.75 7.5V5.25A1.5 1.5 0 0 1 11.25 3.75h1.5a1.5 1.5 0 0 1 1.5 1.5V7.5M10.5 11.25v6M13.5 11.25v6"/></symbol>
+  <symbol id="hi-chevron-right" viewBox="0 0 24 24"><path d="m9 4.5 7.5 7.5L9 19.5"/></symbol>
+</svg>
+
+<div class="shell">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark"><svg class="icon"><use href="#hi-squares"/></svg></div>
+      <div>
+        <div class="brand-title">AI 原生写作项目系统</div>
+        <div class="brand-sub">缺失组件细化原型 v0.1 · Heroicons 风格 · 数据/API 对齐</div>
+      </div>
+    </div>
+    <div class="pill-row">
+      <span class="pill"><svg class="icon icon-sm"><use href="#hi-cog"/></svg>组件库补全</span>
+      <span class="pill">Tauri / Electron</span>
+      <span class="pill">React + TypeScript</span>
+      <span class="pill">SQLite</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-screen="foundation"><svg class="icon"><use href="#hi-squares"/></svg>基础组件</button>
+    <button class="tab" data-screen="navigation"><svg class="icon"><use href="#hi-folder"/></svg>导航/列表</button>
+    <button class="tab" data-screen="forms"><svg class="icon"><use href="#hi-document-text"/></svg>表单/弹窗</button>
+    <button class="tab" data-screen="project"><svg class="icon"><use href="#hi-folder"/></svg>项目组件</button>
+    <button class="tab" data-screen="source"><svg class="icon"><use href="#hi-archive-box"/></svg>资料组件</button>
+    <button class="tab" data-screen="writing"><svg class="icon"><use href="#hi-document-text"/></svg>编辑器组件</button>
+    <button class="tab" data-screen="agent"><svg class="icon"><use href="#hi-chat"/></svg>Agent/Context</button>
+    <button class="tab" data-screen="model"><svg class="icon"><use href="#hi-cpu"/></svg>模型/导出</button>
+    <button class="tab" data-screen="feedback"><svg class="icon"><use href="#hi-warning"/></svg>反馈/任务</button>
+  </div>
+
+  <section class="screen active" id="foundation">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="side-title"><div class="side-icon"><svg class="icon"><use href="#hi-squares"/></svg></div><div><div class="h3">Foundation</div><p class="caption">基础 UI 组件</p></div></div>
+        <div class="section-label">Missing Components</div>
+        <div class="nav active"><svg class="icon"><use href="#hi-squares"/></svg>按钮 / 标签 / 状态</div>
+        <div class="nav"><svg class="icon"><use href="#hi-search"/></svg>搜索 / 筛选</div>
+        <div class="nav"><svg class="icon"><use href="#hi-warning"/></svg>提示 / 禁用</div>
+      </aside>
+      <main class="main">
+        <div class="header-row">
+          <div><h1 class="h1">基础组件补全</h1><p class="body">当前原型主要覆盖页面和空状态，缺少可复用基础组件。这里补齐按钮、标签、输入、状态、快捷键等基础单元。</p></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">Button 组件</h2><span class="tag blue">Component: Button</span></div>
+            <div class="btn-row">
+              <button class="btn btn-primary"><svg class="icon"><use href="#hi-plus"/></svg>主要按钮</button>
+              <button class="btn btn-secondary"><svg class="icon"><use href="#hi-folder"/></svg>次按钮</button>
+              <button class="btn btn-accent"><svg class="icon"><use href="#hi-sparkles"/></svg>AI 动作</button>
+              <button class="btn btn-danger"><svg class="icon"><use href="#hi-trash"/></svg>危险操作</button>
+              <button class="btn btn-ghost">文本按钮</button>
+              <button class="btn btn-disabled"><svg class="icon"><use href="#hi-cpu"/></svg>禁用按钮</button>
+              <button class="btn btn-secondary btn-sm"><svg class="icon icon-sm"><use href="#hi-check"/></svg>小按钮</button>
+            </div>
+            <div class="spec"><pre>Props:
+variant = primary | secondary | accent | danger | ghost
+size = sm | md
+icon = HeroIcon
+disabled = boolean
+loading = boolean
+
+Used by:
+Create project / Import source / Agent actions / Export / Retry</pre></div>
+          </div>
+
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">Badge / Status 组件</h2><span class="tag blue">Component: Badge</span></div>
+            <div class="btn-row">
+              <span class="tag green"><svg class="icon icon-sm"><use href="#hi-check"/></svg>confirmed</span>
+              <span class="tag orange"><svg class="icon icon-sm"><use href="#hi-clock"/></svg>pending</span>
+              <span class="tag blue">draft</span>
+              <span class="tag purple">research</span>
+              <span class="tag danger"><svg class="icon icon-sm"><use href="#hi-warning"/></svg>failed</span>
+              <span class="tag">archived</span>
+            </div>
+            <div class="spec"><pre>Maps:
+Project.status
+Document.status
+Source.processing_status
+Card.status
+Knowledge.status
+AgentRun.status
+ExportTask.status</pre></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="component-title"><h2 class="h2">Search / Filter Bar</h2><span class="tag blue">SearchService / FilterService</span></div>
+          <div class="grid-4">
+            <div class="input-with-icon"><svg class="icon"><use href="#hi-search"/></svg><input placeholder="搜索文档、资料、卡片或知识"/></div>
+            <select><option>类型：全部</option><option>research</option><option>fiction</option></select>
+            <select><option>状态：全部</option><option>confirmed</option><option>pending</option></select>
+            <button class="btn btn-secondary"><svg class="icon"><use href="#hi-x"/></svg>清除筛选</button>
+          </div>
+          <div class="spec"><pre>State:
+keyword
+type
+status
+ai_usage_allowed
+source_type
+
+Empty behavior:
+keyword && items.length=0 → SearchEmpty
+filters active && items.length=0 → FilterEmpty</pre></div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <section class="screen" id="navigation">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="side-title"><div class="side-icon"><svg class="icon"><use href="#hi-folder"/></svg></div><div><div class="h3">Navigation</div><p class="caption">应用导航组件</p></div></div>
+        <div class="section-label">Project Space</div>
+        <div class="nav active"><svg class="icon"><use href="#hi-folder"/></svg>AppShell / Sidebar</div>
+        <div class="nav"><svg class="icon"><use href="#hi-document-text"/></svg>Object List</div>
+        <div class="nav"><svg class="icon"><use href="#hi-search"/></svg>Command Palette</div>
+      </aside>
+      <main class="main">
+        <div class="header-row"><div><h1 class="h1">导航与列表组件</h1><p class="body">页面原型缺少可复用的 AppShell、Breadcrumb、ObjectList、CommandPalette、RecentSwitcher。</p></div></div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">Object Row</h2><span class="tag blue">Reusable List Row</span></div>
+            <div class="object-row">
+              <div class="object-icon"><svg class="icon"><use href="#hi-document-text"/></svg></div>
+              <div><div class="h3">第一章 绪论</div><p class="caption mono">Document · doc_001 · updated_at: 12 min ago</p></div>
+              <span class="tag orange">writing</span>
+            </div>
+            <div class="object-row">
+              <div class="object-icon orange"><svg class="icon"><use href="#hi-archive-box"/></svg></div>
+              <div><div class="h3">AI writing research.pdf</div><p class="caption mono">Source · src_001 · chunks: 18</p></div>
+              <span class="tag green">ready</span>
+            </div>
+            <div class="object-row">
+              <div class="object-icon blue"><svg class="icon"><use href="#hi-squares"/></svg></div>
+              <div><div class="h3">上下文持续性论点</div><p class="caption mono">Card · card_001 · linked node_001</p></div>
+              <span class="tag green">confirmed</span>
+            </div>
+            <div class="spec"><pre>Props:
+objectType
+icon
+title
+subtitle
+status
+metadata
+actions
+
+Used by:
+Document list / Source list / Card list / Knowledge list / AgentThread list</pre></div>
+          </div>
+
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">Command Palette</h2><span class="tag blue">Global Quick Action</span></div>
+            <div class="command">
+              <div class="input-with-icon"><svg class="icon"><use href="#hi-search"/></svg><input class="command-input" placeholder="搜索命令、文档、资料、卡片……"/></div>
+              <div class="command-row"><svg class="icon"><use href="#hi-plus"/></svg><div><b>创建新文档</b><p class="caption">DocumentService.createDocument</p></div><span class="kbd">⌘ N</span></div>
+              <div class="command-row"><svg class="icon"><use href="#hi-archive-box"/></svg><div><b>导入资料</b><p class="caption">SourceService.uploadSource</p></div><span class="kbd">⌘ I</span></div>
+              <div class="command-row"><svg class="icon"><use href="#hi-sparkles"/></svg><div><b>打开 Agent 面板</b><p class="caption">AgentThread current context</p></div><span class="kbd">⌘ J</span></div>
+            </div>
+            <div class="spec"><pre>Missing:
+Global command palette for desktop client.
+
+Data:
+SearchService.searchAll(keyword)
+CommandRegistry.run(commandKey)</pre></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <section class="screen" id="forms">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="side-title"><div class="side-icon"><svg class="icon"><use href="#hi-document-text"/></svg></div><div><div class="h3">Forms</div><p class="caption">弹窗 / 抽屉 / 表单</p></div></div>
+        <div class="section-label">Missing</div>
+        <div class="nav active"><svg class="icon"><use href="#hi-plus"/></svg>Create Modal</div>
+        <div class="nav"><svg class="icon"><use href="#hi-squares"/></svg>Edit Drawer</div>
+        <div class="nav"><svg class="icon"><use href="#hi-warning"/></svg>Confirm Dialog</div>
+      </aside>
+      <main class="main">
+        <div class="header-row"><div><h1 class="h1">表单与浮层组件</h1><p class="body">当前原型有页面，但缺少创建/编辑对象时的 Modal、Drawer、ConfirmDialog、FormField 验证状态。</p></div></div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">Create Modal</h2><span class="tag blue">Project / Document / Card</span></div>
+            <div class="modal-backdrop">
+              <div class="modal">
+                <div class="component-title"><div><h2 class="h2">新建卡片</h2><p class="caption">CardService.createCard(project_id, payload)</p></div><button class="btn btn-ghost"><svg class="icon"><use href="#hi-x"/></svg></button></div>
+                <div class="field"><label>title</label><input value="上下文持续性论点"/></div>
+                <div class="field"><label>type</label><select><option>argument</option><option>excerpt</option><option>term</option></select></div>
+                <div class="field"><label>content</label><textarea>长文本写作的关键不是单次生成，而是上下文持续性。</textarea></div>
+                <div class="btn-row" style="justify-content:flex-end"><button class="btn btn-secondary">取消</button><button class="btn btn-primary"><svg class="icon"><use href="#hi-check"/></svg>创建</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">Edit Drawer</h2><span class="tag blue">Detail Editor</span></div>
+            <div class="drawer-demo">
+              <div class="drawer-content">
+                <p class="body">主页面保持上下文，右侧抽屉编辑对象详情，适合 Card、Knowledge、ModelProvider、OutlineNode。</p>
+                <div class="object-row"><div class="object-icon blue"><svg class="icon"><use href="#hi-squares"/></svg></div><div><b>上下文持续性论点</b><p class="caption">card_001 · confirmed</p></div><span class="tag green">selected</span></div>
+              </div>
+              <div class="drawer">
+                <div class="component-title"><div><h2 class="h2">卡片详情</h2><p class="caption mono">card_001</p></div><button class="btn btn-ghost"><svg class="icon"><use href="#hi-x"/></svg></button></div>
+                <div class="field"><label>status</label><select><option>confirmed</option><option>pending</option><option>deprecated</option></select></div>
+                <div class="field"><label>tags</label><input value="论点, 核心"/></div>
+                <div class="btn-row"><button class="btn btn-primary">保存</button><button class="btn btn-danger">废弃</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="component-title"><h2 class="h2">Confirm Dialog</h2><span class="tag danger">Destructive Action</span></div>
+          <div class="modal-backdrop" style="min-height:260px">
+            <div class="modal" style="max-width:440px">
+              <div class="agent-head"><div class="agent-avatar" style="background:var(--danger-soft);color:var(--danger)"><svg class="icon"><use href="#hi-warning"/></svg></div><div><h2 class="h2">删除这份资料？</h2><p class="body">资料会被移入本地回收站，已生成的卡片不会自动删除。</p></div></div>
+              <div class="btn-row" style="justify-content:flex-end;margin-top:18px"><button class="btn btn-secondary">取消</button><button class="btn btn-danger"><svg class="icon"><use href="#hi-trash"/></svg>删除</button></div>
+            </div>
+          </div>
+          <div class="spec"><pre>Used by:
+deleteProject / deleteDocument / deleteSource / deleteCard / deleteKnowledge
+
+Behavior:
+Soft delete first: is_deleted=true, deleted_at=now()</pre></div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <section class="screen" id="project">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="side-title"><div class="side-icon"><svg class="icon"><use href="#hi-folder"/></svg></div><div><div class="h3">Project</div><p class="caption">项目级组件</p></div></div>
+        <div class="nav active"><svg class="icon"><use href="#hi-folder"/></svg>Project Card</div>
+        <div class="nav"><svg class="icon"><use href="#hi-cog"/></svg>Project Settings</div>
+        <div class="nav"><svg class="icon"><use href="#hi-check"/></svg>Overview Stats</div>
+      </aside>
+      <main class="main">
+        <div class="header-row"><div><h1 class="h1">项目组件</h1><p class="body">当前原型缺少项目卡片的完整状态、设置面板和本地项目库管理组件。</p></div></div>
+
+        <div class="grid-3">
+          <div class="project-card">
+            <span class="tag purple">research</span>
+            <h2 class="h2" style="margin-top:16px">AI 写作系统研究</h2>
+            <p class="body">资料 12 · 文档 8 · 卡片 34 · 12,000 字</p>
+            <div class="btn-row" style="margin-top:18px"><span class="tag orange">writing</span><span class="tag">12 分钟前</span></div>
+          </div>
+          <div class="project-card">
+            <span class="tag blue">fiction</span>
+            <h2 class="h2" style="margin-top:16px">旧城机械师</h2>
+            <p class="body">人物 6 · 章节 14 · 设定 22 · 45,800 字</p>
+            <div class="btn-row" style="margin-top:18px"><span class="tag orange">revising</span><span class="tag">昨天</span></div>
+          </div>
+          <div class="project-card">
+            <span class="tag green">free_writing</span>
+            <h2 class="h2" style="margin-top:16px">雨天散文集</h2>
+            <p class="body">片段 18 · 意象 9 · 8,400 字</p>
+            <div class="btn-row" style="margin-top:18px"><span class="tag">draft</span><span class="tag">3 天前</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="component-title"><h2 class="h2">Project Settings Panel</h2><span class="tag blue">ProjectService.updateProject</span></div>
+          <div class="grid-2">
+            <div>
+              <div class="field"><label>name</label><input value="AI 写作系统研究"/></div>
+              <div class="field"><label>type</label><select><option>research</option><option>fiction</option><option>free_writing</option></select></div>
+              <div class="field"><label>target_word_count</label><input value="30000"/></div>
+            </div>
+            <div>
+              <div class="field"><label>style_rules</label><textarea>结构清晰、表达克制、不编造来源。</textarea></div>
+              <div class="field"><label>forbidden_rules</label><textarea>不展示原始思维链；不做无来源断言。</textarea></div>
+            </div>
+          </div>
+          <div class="spec"><pre>Missing component:
+ProjectSettingsPanel
+
+Fields:
+name, type, description, writing_goal, target_reader, target_word_count, style_rules, forbidden_rules, default_context_policy, default_model_policy</pre></div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <section class="screen" id="source">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="side-title"><div class="side-icon"><svg class="icon"><use href="#hi-archive-box"/></svg></div><div><div class="h3">Source</div><p class="caption">资料组件</p></div></div>
+        <div class="nav active"><svg class="icon"><use href="#hi-archive-box"/></svg>Upload / Parse</div>
+        <div class="nav"><svg class="icon"><use href="#hi-document-text"/></svg>Source Detail</div>
+        <div class="nav"><svg class="icon"><use href="#hi-squares"/></svg>Create Card</div>
+      </aside>
+      <main class="main">
+        <div class="header-row"><div><h1 class="h1">资料组件补全</h1><p class="body">需要补充文件导入、解析状态、资料摘要卡、片段摘录、AI 使用开关等组件。</p></div></div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">File Dropzone</h2><span class="tag blue">SourceService.uploadSource</span></div>
+            <div class="file-drop">
+              <div>
+                <div class="object-icon orange" style="margin:0 auto 12px"><svg class="icon"><use href="#hi-archive-box"/></svg></div>
+                <h2 class="h2">拖拽文件到这里</h2>
+                <p class="body">支持 PDF、Word、Markdown、TXT。资料默认保存在本机。</p>
+                <div class="btn-row" style="justify-content:center;margin-top:14px"><button class="btn btn-primary">选择文件</button><button class="btn btn-secondary">粘贴文本</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">Parse Progress</h2><span class="tag orange">TaskService</span></div>
+            <div class="object-row">
+              <div class="object-icon orange"><svg class="icon"><use href="#hi-archive-box"/></svg></div>
+              <div><b>AI writing research.pdf</b><p class="caption">正在提取文本并生成 SourceChunk</p><div class="progress"><span></span></div></div>
+              <span class="tag orange">parsing</span>
+            </div>
+            <div class="object-row">
+              <div class="object-icon orange"><svg class="icon"><use href="#hi-warning"/></svg></div>
+              <div><b>scan.pdf</b><p class="caption">无法提取文本，可重试或粘贴正文。</p></div>
+              <button class="btn btn-danger btn-sm">重试</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="component-title"><h2 class="h2">Source Detail Summary</h2><span class="tag blue">Source + SourceChunk</span></div>
+          <div class="grid-2">
+            <div class="card-item">
+              <div class="btn-row"><span class="tag green">ready</span><span class="tag blue">chunks: 18</span><span class="tag green">AI 可用</span></div>
+              <h2 class="h2" style="margin-top:14px">AI writing research.pdf</h2>
+              <p class="body">这份资料讨论了 AI 写作系统从单点生成向项目级协作转变的趋势。</p>
+              <div class="btn-row" style="margin-top:14px"><button class="btn btn-secondary">重新摘要</button><button class="btn btn-primary">生成卡片</button></div>
+            </div>
+            <div>
+              <div class="metadata-grid">
+                <div class="meta-cell"><p class="caption">source_id</p><b class="mono">src_001</b></div>
+                <div class="meta-cell"><p class="caption">type</p><b class="mono">pdf</b></div>
+                <div class="meta-cell"><p class="caption">ai_usage_allowed</p><b class="mono">true</b></div>
+                <div class="meta-cell"><p class="caption">privacy_level</p><b class="mono">cloud_allowed</b></div>
+              </div>
+            </div>
+          </div>
+          <div class="spec"><pre>Missing components:
+SourceDetailHeader
+SourceSummaryCard
+SourceChunkList
+AIUsageSwitch
+PrivacyLevelSelect
+CreateCardFromSelectionPopover</pre></div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <section class="screen" id="writing">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="side-title"><div class="side-icon"><svg class="icon"><use href="#hi-document-text"/></svg></div><div><div class="h3">Writing</div><p class="caption">编辑器组件</p></div></div>
+        <div class="nav active"><svg class="icon"><use href="#hi-document-text"/></svg>Editor Toolbar</div>
+        <div class="nav"><svg class="icon"><use href="#hi-sparkles"/></svg>Selection Menu</div>
+        <div class="nav"><svg class="icon"><use href="#hi-eye"/></svg>Diff Preview</div>
+      </aside>
+      <main class="main">
+        <div class="header-row"><div><h1 class="h1">编辑器组件补全</h1><p class="body">当前页面已有编辑器轮廓，但缺少标题栏、保存状态、选区菜单、AI 修改 diff、版本入口等关键组件。</p></div></div>
+
+        <div class="panel">
+          <div class="component-title"><h2 class="h2">Editor Toolbar</h2><span class="tag blue">DocumentService.autosaveDocument</span></div>
+          <div class="toolbar">
+            <div class="btn-row">
+              <button class="btn btn-secondary btn-sm">正文</button>
+              <button class="btn btn-secondary btn-sm">标题</button>
+              <button class="btn btn-secondary btn-sm">引用</button>
+              <button class="btn btn-secondary btn-sm">列表</button>
+              <button class="btn btn-accent btn-sm"><svg class="icon icon-sm"><use href="#hi-sparkles"/></svg>AI</button>
+            </div>
+            <div class="btn-row">
+              <span class="tag green"><svg class="icon icon-sm"><use href="#hi-check"/></svg>已保存</span>
+              <span class="tag">3,560 字</span>
+              <button class="btn btn-secondary btn-sm"><svg class="icon icon-sm"><use href="#hi-clock"/></svg>历史</button>
+            </div>
+          </div>
+          <div class="spec"><pre>Missing components:
+EditorToolbar
+AutosaveIndicator
+WordCountBadge
+DocumentHistoryButton
+AISelectionButton</pre></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">Selection Floating Menu</h2><span class="tag orange">选区操作</span></div>
+            <p class="body">选中文本后出现：</p>
+            <div class="btn-row" style="margin-top:12px">
+              <button class="btn btn-accent btn-sm"><svg class="icon icon-sm"><use href="#hi-sparkles"/></svg>改写</button>
+              <button class="btn btn-secondary btn-sm">扩写</button>
+              <button class="btn btn-secondary btn-sm">缩写</button>
+              <button class="btn btn-secondary btn-sm">检查来源</button>
+              <button class="btn btn-secondary btn-sm">保存为卡片</button>
+            </div>
+            <div class="spec"><pre>Trigger:
+editor.selection !== empty
+
+Action:
+AgentService.createThread(bound_object_type="document_selection")
+ContextService.previewContext(selected_text)</pre></div>
+          </div>
+
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">AI Diff Preview</h2><span class="tag blue">AgentMessage adoption</span></div>
+            <div class="diff">
+              <div class="diff-col"><h3 class="h3">修改前</h3><p class="body">AI 写作工具正在从<span class="del">单点生成能力</span>转向项目级协作系统。</p></div>
+              <div class="diff-col"><h3 class="h3">修改后</h3><p class="body">AI 写作工具正在从<span class="ins">单次文本生成</span>转向<span class="ins">围绕项目上下文展开的协作系统</span>。</p></div>
+            </div>
+            <div class="btn-row" style="margin-top:12px"><button class="btn btn-primary">接受修改</button><button class="btn btn-secondary">继续修改</button><button class="btn btn-accent">保存为知识</button></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <section class="screen" id="agent">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="side-title"><div class="side-icon"><svg class="icon"><use href="#hi-chat"/></svg></div><div><div class="h3">Agent</div><p class="caption">AI 组件</p></div></div>
+        <div class="nav active"><svg class="icon"><use href="#hi-chat"/></svg>Agent Panel</div>
+        <div class="nav"><svg class="icon"><use href="#hi-stack"/></svg>ContextPack</div>
+        <div class="nav"><svg class="icon"><use href="#hi-eye"/></svg>Explain</div>
+      </aside>
+      <main class="main">
+        <div class="header-row"><div><h1 class="h1">Agent / Context 组件补全</h1><p class="body">这是产品核心组件。当前原型仍缺 ContextPack 预览、上下文选择器、Agent 输出卡、解释折叠区、采纳动作条。</p></div></div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">ContextPack Preview</h2><span class="tag blue">ContextService.previewContext</span></div>
+            <div class="context-list">
+              <div class="context-item"><input type="checkbox" checked><div><b>当前选区</b><p class="caption mono">selected_text · 132 chars</p></div><span class="tag green">required</span></div>
+              <div class="context-item"><input type="checkbox" checked><div><b>第一章 绪论</b><p class="caption mono">document:doc_001</p></div><span class="tag blue">current</span></div>
+              <div class="context-item"><input type="checkbox" checked><div><b>AI writing research.pdf</b><p class="caption mono">source:src_001 · chunks 3</p></div><span class="tag">source</span></div>
+              <div class="context-item"><input type="checkbox" checked><div><b>项目风格规则</b><p class="caption mono">knowledge:kn_002</p></div><span class="tag green">rule</span></div>
+            </div>
+            <div class="spec"><pre>Missing component:
+ContextPackPreview
+ContextItem
+TokenEstimate
+Include/Exclude toggle
+
+Output:
+context_pack_id
+token_estimate
+selected object ids</pre></div>
+          </div>
+
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">Agent Output Card</h2><span class="tag blue">AgentMessage</span></div>
+            <div class="agent-panel">
+              <div class="agent-head"><div class="agent-avatar"><svg class="icon"><use href="#hi-sparkles"/></svg></div><div><h3 class="h3">论文助手</h3><p class="caption">run_001 · model_cfg_001 · succeeded</p></div></div>
+              <div class="bubble user">请检查这一段是否缺少资料支撑。</div>
+              <div class="bubble ai">当前段落有一个判断缺少直接来源。建议补充资料，或改为更谨慎表达。</div>
+              <div class="explain"><b>为什么这样建议？</b><p class="caption">参考：当前选区、资料 A、项目规则。不确定项：缺少直接统计来源。</p></div>
+              <div class="btn-row"><button class="btn btn-primary btn-sm">接受</button><button class="btn btn-secondary btn-sm">继续修改</button><button class="btn btn-accent btn-sm">保存为知识</button><button class="btn btn-secondary btn-sm">保存为卡片</button></div>
+            </div>
+            <div class="spec"><pre>Fields:
+AgentMessage.content
+AgentMessage.explanation
+AgentMessage.adoption_status
+AgentMessage.saved_as_card_id
+AgentMessage.saved_as_knowledge_id</pre></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <section class="screen" id="model">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="side-title"><div class="side-icon"><svg class="icon"><use href="#hi-cpu"/></svg></div><div><div class="h3">Model / Export</div><p class="caption">模型与交付组件</p></div></div>
+        <div class="nav active"><svg class="icon"><use href="#hi-cpu"/></svg>Model Provider</div>
+        <div class="nav"><svg class="icon"><use href="#hi-download"/></svg>Export Wizard</div>
+      </aside>
+      <main class="main">
+        <div class="header-row"><div><h1 class="h1">模型与导出组件</h1><p class="body">需要补充模型服务商表单、连接测试、任务模型配置、导出向导和导出记录组件。</p></div></div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">ModelProvider Form</h2><span class="tag blue">ModelService</span></div>
+            <div class="field"><label>name</label><input value="OpenAI Compatible"/></div>
+            <div class="field"><label>base_url</label><input value="https://api.example.com/v1"/></div>
+            <div class="field"><label>api_key</label><input value="sk-****abcd"/></div>
+            <div class="field"><label>default_model_name</label><input value="gpt-4.1"/></div>
+            <div class="btn-row"><button class="btn btn-secondary">测试连接</button><button class="btn btn-primary">保存配置</button></div>
+            <div class="spec"><pre>Security:
+api_key_encrypted in local storage
+UI only shows api_key_masked
+
+Service:
+ModelService.testProvider(provider_id)</pre></div>
+          </div>
+
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">Export Wizard</h2><span class="tag blue">ExportService.createExportTask</span></div>
+            <div class="field"><label>export_scope</label><select><option>whole_project</option><option>current_document</option><option>outline_scope</option></select></div>
+            <div class="field"><label>export_format</label><select><option>word</option><option>markdown</option></select></div>
+            <div class="context-list">
+              <div class="context-item"><input type="checkbox" checked><div><b>第一章 绪论</b><p class="caption mono">doc_001</p></div><span class="tag">1</span></div>
+              <div class="context-item"><input type="checkbox" checked><div><b>第二章 文献综述</b><p class="caption mono">doc_002</p></div><span class="tag">2</span></div>
+            </div>
+            <div class="btn-row" style="margin-top:12px"><button class="btn btn-secondary">预览顺序</button><button class="btn btn-primary">开始导出</button></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <section class="screen" id="feedback">
+    <div class="frame">
+      <aside class="sidebar">
+        <div class="side-title"><div class="side-icon"><svg class="icon"><use href="#hi-warning"/></svg></div><div><div class="h3">Feedback</div><p class="caption">任务与反馈组件</p></div></div>
+        <div class="nav active"><svg class="icon"><use href="#hi-check"/></svg>Toast</div>
+        <div class="nav"><svg class="icon"><use href="#hi-clock"/></svg>Task Center</div>
+        <div class="nav"><svg class="icon"><use href="#hi-warning"/></svg>Error</div>
+      </aside>
+      <main class="main">
+        <div class="header-row"><div><h1 class="h1">反馈与任务组件</h1><p class="body">客户端会有大量本地任务：解析、摘要、Agent 调用、导出、索引。需要统一任务中心和 Toast。</p></div></div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">Toast Stack</h2><span class="tag blue">NotificationService</span></div>
+            <div class="toast-stack">
+              <div class="toast success"><svg class="icon"><use href="#hi-check"/></svg><div><b>文档已保存</b><p class="caption">DocumentService.autosaveDocument succeeded</p></div><button class="btn btn-ghost btn-sm">关闭</button></div>
+              <div class="toast warning"><svg class="icon"><use href="#hi-clock"/></svg><div><b>资料正在解析</b><p class="caption">你可以继续编辑，解析完成后会通知。</p></div><button class="btn btn-ghost btn-sm">查看</button></div>
+              <div class="toast error"><svg class="icon"><use href="#hi-warning"/></svg><div><b>模型连接失败</b><p class="caption">请检查 Base URL、API Key 或模型名称。</p></div><button class="btn btn-ghost btn-sm">设置</button></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="component-title"><h2 class="h2">Task Center</h2><span class="tag blue">TaskService</span></div>
+            <div class="object-row">
+              <div class="object-icon orange"><svg class="icon"><use href="#hi-archive-box"/></svg></div>
+              <div><b>解析资料：AI writing research.pdf</b><p class="caption">parse_source · running</p><div class="progress"><span></span></div></div>
+              <button class="btn btn-secondary btn-sm">取消</button>
+            </div>
+            <div class="object-row">
+              <div class="object-icon"><svg class="icon"><use href="#hi-sparkles"/></svg></div>
+              <div><b>Agent 正在生成回复</b><p class="caption">agent_run · run_001</p><div class="progress"><span style="width:42%"></span></div></div>
+              <button class="btn btn-secondary btn-sm">查看</button>
+            </div>
+            <div class="object-row">
+              <div class="object-icon blue"><svg class="icon"><use href="#hi-download"/></svg></div>
+              <div><b>导出 Word</b><p class="caption">export_task · export_001</p><div class="progress"><span style="width:78%"></span></div></div>
+              <button class="btn btn-secondary btn-sm">后台运行</button>
+            </div>
+            <div class="spec"><pre>Task types:
+parse_source
+summarize_source
+agent_run
+generate_outline
+export_document
+build_search_index
+
+States:
+pending / running / succeeded / failed / cancelled</pre></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </section>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const screens = document.querySelectorAll('.screen');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      screens.forEach(s => s.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.screen).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
